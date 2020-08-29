@@ -325,6 +325,37 @@ static int console_init_action(const std::vector<std::string>& args)
     return 0;
 }
 
+#ifdef MTK_HARDWARE
+static int USE_MTK_SERIAL()
+{
+    int serialdir;
+    char serial[32];
+    size_t m;
+
+    serialdir = open("/sys/sys_info/serial_number", O_RDWR);
+    if (serialdir < 0) {
+        NOTICE("fail to open: %s\n", "/sys/sys_info/serial_number");
+        return 0;
+    }
+    m = read(serialdir, serial, sizeof(char)*32);
+
+    serial[m-1] = '\0';
+
+    close(serialdir);
+
+    if (m <= 0) {
+	    NOTICE("could not get mtk serial number from  sys file\n");
+	    return 0;
+	}
+
+    NOTICE("serial number=%s\n",serial);
+
+    property_set("ro.boot.serialno", serial);
+
+    return 1;
+}
+#endif
+
 static void import_kernel_nv(const std::string& key, const std::string& value, bool for_emulator) {
     if (key.empty()) return;
 
@@ -419,6 +450,11 @@ static void process_kernel_cmdline() {
     // as properties.
     import_kernel_cmdline(false, import_kernel_nv);
     if (qemu[0]) import_kernel_cmdline(true, import_kernel_nv);
+
+#ifdef MTK_HARDWARE
+    USE_MTK_SERIAL();
+#endif
+
 }
 
 static int property_enable_triggers_action(const std::vector<std::string>& args)
