@@ -1160,7 +1160,7 @@ int main(int argc, char** argv) {
     am.QueueBuiltinAction(wait_for_coldboot_done_action, "wait_for_coldboot_done");
     // ... so that we can start queuing up actions that require stuff from /dev.
     am.QueueBuiltinAction(mix_hwrng_into_linux_rng_action, "mix_hwrng_into_linux_rng");
-    am.QueueBuiltinAction(set_mmap_rnd_bits_action, "set_mmap_rnd_bits");
+    //am.QueueBuiltinAction(set_mmap_rnd_bits_action, "set_mmap_rnd_bits");
     am.QueueBuiltinAction(set_kptr_restrict_action, "set_kptr_restrict");
     am.QueueBuiltinAction(keychord_init_action, "keychord_init");
     am.QueueBuiltinAction(console_init_action, "console_init");
